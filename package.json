@@ -1,0 +1,124 @@
+{
+  "name": "iris-global-editor",
+  "displayName": "IRIS Global Editor",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "irisGlobals",
+          "name": "InterSystems IRIS Globals"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "irisGlobals.addEntry",
+        "title": "Add",
+        "icon": {
+          "light": "resources/light/add.svg",
+          "dark": "resources/dark/add.svg"
+        }
+      },
+      {
+        "command": "irisGlobals.deleteEntry",
+        "title": "Delete",
+        "icon": {
+          "light": "resources/light/trash.svg",
+          "dark": "resources/dark/trash.svg"
+        }
+      },
+      {
+        "command": "irisGlobals.editEntry",
+        "title": "Edit",
+        "icon": {
+          "light": "resources/light/edit.svg",
+          "dark": "resources/dark/edit.svg"
+        }
+      },
+      {
+        "command": "irisGlobals.editTextEntry",
+        "title": "Editor",
+        "icon": {
+          "light": "resources/light/file.svg",
+          "dark": "resources/dark/file.svg"
+        }
+      },
+      {
+        "command": "irisGlobals.refreshEntry",
+        "title": "IRIS Globals: Refresh",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "irisGlobals.refreshEntry",
+          "when": "view == irisGlobals",
+          "group": "navigation"
+        },
+        {
+          "command": "irisGlobals.addEntry",
+          "when": "view == irisGlobals",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "irisGlobals.deleteEntry",
+          "when": "view == irisGlobals",
+          "group": "inline"
+        },
+        {
+          "command": "irisGlobals.editEntry",
+          "when": "view == irisGlobals",
+          "group": "inline"
+        },
+        {
+          "command": "irisGlobals.editTextEntry",
+          "when": "view == irisGlobals",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.95.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0",
+    "intersystems-iris": "^0.2.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "intersystems-iris": "^0.2.2",
+    "iris-global-editor": "file:",
+    "node-fetch": "^3.3.2",
+    "yaml": "^2.6.1"
+  }
+}
