@@ -13,6 +13,12 @@ This is a VSCode Plug-in to do CRUD operations over InterSystems IRIS Globals.
 7. Select the file iris-global-editor-0.0.1.vsix
 8. Go to menu View > Explorer
 9. Now a new section InterSystems IRIS Globals is available
+10. Config the host and credentials on .vscode/settings.json, including this content (change host, username, password with your valid values):
+    "conf.irisGlobalEditor.serverconfig": {
+      "host": "http://localhost:52773",
+      "username": "_SYSTEM",
+      "password": "SYS"
+    }
 
 ## Features
 
