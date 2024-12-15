@@ -6,24 +6,24 @@ This is a VSCode Plug-in to do CRUD operations over InterSystems IRIS Globals.
 
 1. Go to Extensions
 2. On the Extensions tab, click the button ...
-3. Select the option install from vsix...
-4. Select the file iris-global-editor-0.0.1.vsix
-5. Go to menu View > Explorer
-6. Now a new section InterSystems IRIS Globals is available
+3. Select the option install from vsix... ([VSIX Installation](https://github.com/yurimarx/iris-global-editor/blob/master/images/install.png)\)
+5. Select the file iris-global-editor-0.0.1.vsix
+6. Go to menu View > Explorer
+7. Now a new section InterSystems IRIS Globals is available
 
 ## Features
 
 ### Treeview with InterSystems IRIS namespace global list
 
-\!\[Namespace Global List\]\(images/treeview.png\)
+\!\[Namespace Global List\]\([images](https://github.com/yurimarx/iris-global-editor/blob/master/images/treeview.png\)
 
 ### CRUD operations over InterSystems Globals
 
-\!\[CRUD over Globals\]\(images/crud.png\)
+\!\[CRUD over Globals\]\([images](https://github.com/yurimarx/iris-global-editor/blob/master/images/crud.png\)
 
 ### Edit/Create InterSystems IRIS Globals using YAML language
 
-\!\[Globals with YAML\]\(images/yaml.png\)
+\!\[Globals with YAML\]\([images]\(https://github.com/yurimarx/iris-global-editor/blob/master/images/install.png)yaml.png\)
 
 ## Requirements
 
