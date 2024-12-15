@@ -3,19 +3,12 @@ import * as path from 'path';
 import { log } from 'console';
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 
-export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> {
-  
+export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlobal> {
+
   constructor(private context: vscode.ExtensionContext) {}
 
-  baseURL: string = "http://localhost:52773/iris-global-yaml";
+  baseURL: string = "/iris-global-yaml";
   
-  headers: AxiosRequestConfig = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Basic ' + btoa('_SYSTEM:SYS')
-    } as RawAxiosRequestHeaders,
-  };
-
   private _onDidChangeTreeData: vscode.EventEmitter<IrisGlobal | undefined | null | void> = new vscode.EventEmitter<IrisGlobal | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<IrisGlobal | undefined | null | void> = this._onDidChangeTreeData.event;
   
@@ -25,21 +18,42 @@ export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> 
 
   public async delete(globalname: string) {
     
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
     const client = axios.create({
-      baseURL: this.baseURL,
+      baseURL: cfgValues.host + this.baseURL,
     });
 
     const globalParts = globalname.split(":", 2);
 
     const requestString = "/globals/USER/" + globalParts[0].trim();
     
-    const globalsYaml: AxiosResponse = await client.delete(requestString, this.headers);
+    const globalsYaml: AxiosResponse = await client.delete(requestString, headers);
     
     if (globalsYaml.status === 200) {
       vscode.window.showInformationMessage("Global successfully deleted");
     } else {
       vscode.window.showErrorMessage("Error on try to delete Global. Error: " + globalsYaml.statusText);
     }
+  }
+
+  private async getIrisGlobalsConfig() {
+    
+    try {
+      const configuration = await vscode.workspace.getConfiguration('');
+      return configuration.get('conf.irisGlobalEditor.serverconfig');
+    } catch (error) {
+      log(error);
+      return null;
+    }
+
   }
 
   public async add() {
@@ -59,15 +73,24 @@ export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> 
       vscode.window.showInformationMessage(addInput!);
     }
 
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
     const client = axios.create({
-      baseURL: this.baseURL,
+      baseURL: cfgValues.host + this.baseURL,
     });
 
     const inputParts = addInput === undefined ? [] : addInput.split(':', 2);
     
     const requestString = "/globals/USER/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
     
-    const globalsYaml: AxiosResponse = await client.put(requestString, "{}", this.headers);
+    const globalsYaml: AxiosResponse = await client.put(requestString, "{}", headers);
     
     if (globalsYaml.status === 200) {
       vscode.window.showInformationMessage("Global successfully assigned");
@@ -94,15 +117,24 @@ export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> 
       vscode.window.showInformationMessage(addInput!);
     }
 
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
     const client = axios.create({
-      baseURL: this.baseURL,
+      baseURL: cfgValues.host + this.baseURL,
     });
 
     const inputParts = addInput === undefined ? [] : addInput.split(':', 2);
     
     const requestString = "/globals/USER/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
     
-    const globalsYaml: AxiosResponse = await client.put(requestString, "{}", this.headers);
+    const globalsYaml: AxiosResponse = await client.put(requestString, "{}", headers);
     
     if (globalsYaml.status === 200) {
       vscode.window.showInformationMessage("Global successfully assigned");
@@ -114,15 +146,24 @@ export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> 
 
   public async editText(globalvalue: string) {
 
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
     const client = axios.create({
-      baseURL: this.baseURL,
+      baseURL: cfgValues.host + this.baseURL,
     });
 
     const inputParts = globalvalue === undefined ? [] : globalvalue.split(':', 2);
     
     const requestString = "/globals/yaml/USER/" + inputParts[0].trim();
     
-    const globalsYaml: AxiosResponse = await client.get(requestString, this.headers);
+    const globalsYaml: AxiosResponse = await client.get(requestString, headers);
     
     if (globalsYaml.status === 200) {
       vscode.workspace.openTextDocument({
@@ -149,11 +190,20 @@ export class IrisGlobalsProvider implements vscode.TreeDataProvider<IrisGlobal> 
 
     let response: IrisGlobal[] = [];
 
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
     const client = axios.create({
-      baseURL: this.baseURL,
+      baseURL: cfgValues.host + this.baseURL,
     });
 
-    const globalsYaml: AxiosResponse = await client.get("/globals/USER", this.headers);
+    const globalsYaml: AxiosResponse = await client.get("/globals/USER", headers);
 
     log(globalsYaml.data);
     
