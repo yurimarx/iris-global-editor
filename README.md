@@ -4,12 +4,15 @@ This is a VSCode Plug-in to do CRUD operations over InterSystems IRIS Globals.
 
 ## Installation procedures
 
-1. Go to Extensions
-2. On the Extensions tab, click the button ...
-3. Select the option install from vsix... ([VSIX Installation](https://github.com/yurimarx/iris-global-editor/blob/master/images/install.png)\)
-5. Select the file iris-global-editor-0.0.1.vsix
-6. Go to menu View > Explorer
-7. Now a new section InterSystems IRIS Globals is available
+1. Get an InterSystems IRIS server to use 
+2. Install this REQUIRED application into your IRIS instance: https://github.com/yurimarx/iris-global-yaml
+3. Return to the VSCODE
+4. Go to Extensions
+5. On the Extensions tab, click the button ...
+6. Select the option install from vsix... ([VSIX Installation](https://github.com/yurimarx/iris-global-editor/blob/master/images/install.png)\)
+7. Select the file iris-global-editor-0.0.1.vsix
+8. Go to menu View > Explorer
+9. Now a new section InterSystems IRIS Globals is available
 
 ## Features
 
