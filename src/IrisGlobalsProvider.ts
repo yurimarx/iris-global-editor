@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import {fileFromPath} from 'formdata-node/file-from-path';
 import { log } from 'console';
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 
@@ -146,30 +147,37 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
 
   public async saveGlobalWithYaml(filename: string) {
     
-    const cfgValues:any = await this.getIrisGlobalsConfig();
-
-    const headers: AxiosRequestConfig = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
-      } as RawAxiosRequestHeaders,
-    };
+    if(filename.endsWith('.yml')) {
+      const cfgValues:any = await this.getIrisGlobalsConfig();
+  
+      const headers: AxiosRequestConfig = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+        } as RawAxiosRequestHeaders,
+      };
+      
+      const client = axios.create({
+        baseURL: cfgValues.host + this.baseURL
+      });
+  
+      const requestString = "/globals/" + cfgValues.namespace;
+      
+      const formData = new FormData();
+      formData.append('file', await fileFromPath(filename));
+      
+      try {
+        const globalsYaml: AxiosResponse = await client.post(requestString, formData, headers);
     
-    const client = axios.create({
-      baseURL: cfgValues.host + this.baseURL
-    });
+        if (globalsYaml.statusText === "OK") {
+          vscode.window.showInformationMessage("File " + filename + "sent with success and global saved");
+        } else {
+          vscode.window.showErrorMessage("Error while send yml file. Error: " + globalsYaml.statusText);
+        }
+      } catch (error) {
+        vscode.window.showErrorMessage("Error while send yml file. Error: " + error);
+      }
 
-    const requestString = "/globals/" + cfgValues.namespace;
-    
-    var formData = new FormData();
-    formData.append("file", filename);
-
-    const globalsYaml: AxiosResponse = await client.post(requestString, formData, headers);
-
-    if (globalsYaml.statusText === "200") {
-      vscode.window.showInformationMessage("File " + filename + "sent with success");
-    } else {
-      vscode.window.showErrorMessage("Error while send yml file. Error: " + globalsYaml.statusText);
     }
 
   }
