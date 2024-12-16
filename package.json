@@ -109,6 +109,10 @@
                 "type": "string",
                 "description": "InterSystems IRIS Host"
               },
+              "namespace": {
+                "type": "string",
+                "description": "InterSystems IRIS Namespace"
+              },
               "username": {
                 "type": "string",
                 "description": "User name credential"

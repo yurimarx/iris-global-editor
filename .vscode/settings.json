@@ -11,9 +11,9 @@
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
     "typescript.tsc.autoDetect": "off",
     "conf.irisGlobalEditor.serverconfig": {
-      "host": "http://localhost:52773",
-      "username": "_SYSTEM",
-      "password": "SYS"
+        "host": "http://localhost:52773",
+        "namespace": "USER",
+        "username": "_SYSTEM",
+        "password": "SYS"
     }
-
 }

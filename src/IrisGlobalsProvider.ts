@@ -33,7 +33,7 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
 
     const globalParts = globalname.split(":", 2);
 
-    const requestString = "/globals/USER/" + globalParts[0].trim();
+    const requestString = "/globals/" + cfgValues.namespace + "/" + globalParts[0].trim();
     
     const globalsYaml: AxiosResponse = await client.delete(requestString, headers);
     
@@ -88,7 +88,7 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
 
     const inputParts = addInput === undefined ? [] : addInput.split(':', 2);
     
-    const requestString = "/globals/USER/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
+    const requestString = "/globals/" + cfgValues.namespace + "/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
     
     const globalsYaml: AxiosResponse = await client.put(requestString, "{}", headers);
     
@@ -132,7 +132,7 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
 
     const inputParts = addInput === undefined ? [] : addInput.split(':', 2);
     
-    const requestString = "/globals/USER/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
+    const requestString = "/globals/" + cfgValues.namespace + "/" + inputParts[0].trim() + "?globalvalue=" + inputParts[1].trim();
     
     const globalsYaml: AxiosResponse = await client.put(requestString, "{}", headers);
     
@@ -140,6 +140,36 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
       vscode.window.showInformationMessage("Global successfully assigned");
     } else {
       vscode.window.showErrorMessage("Error while Global assigned. Error: " + globalsYaml.statusText);
+    }
+
+  }
+
+  public async saveGlobalWithYaml(filename: string) {
+    
+    const cfgValues:any = await this.getIrisGlobalsConfig();
+
+    const headers: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa(cfgValues.username + ":" + cfgValues.password)
+      } as RawAxiosRequestHeaders,
+    };
+    
+    const client = axios.create({
+      baseURL: cfgValues.host + this.baseURL
+    });
+
+    const requestString = "/globals/" + cfgValues.namespace;
+    
+    var formData = new FormData();
+    formData.append("file", filename);
+
+    const globalsYaml: AxiosResponse = await client.post(requestString, formData, headers);
+
+    if (globalsYaml.statusText === "200") {
+      vscode.window.showInformationMessage("File " + filename + "sent with success");
+    } else {
+      vscode.window.showErrorMessage("Error while send yml file. Error: " + globalsYaml.statusText);
     }
 
   }
@@ -156,12 +186,12 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
     };
     
     const client = axios.create({
-      baseURL: cfgValues.host + this.baseURL,
+      baseURL: cfgValues.host + this.baseURL
     });
 
     const inputParts = globalvalue === undefined ? [] : globalvalue.split(':', 2);
     
-    const requestString = "/globals/yaml/USER/" + inputParts[0].trim();
+    const requestString = "/globals/yaml/" + cfgValues.namespace + "/" + inputParts[0].trim();
     
     const globalsYaml: AxiosResponse = await client.get(requestString, headers);
     
@@ -203,7 +233,7 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
       baseURL: cfgValues.host + this.baseURL,
     });
 
-    const globalsYaml: AxiosResponse = await client.get("/globals/USER", headers);
+    const globalsYaml: AxiosResponse = await client.get("/globals/" + cfgValues.namespace, headers);
 
     log(globalsYaml.data);
     
