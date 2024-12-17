@@ -10,7 +10,7 @@ This is a VSCode Plug-in to do CRUD operations over InterSystems IRIS Globals.
 4. Go to Extensions
 5. On the Extensions tab, click the button ...
 6. Select the option install from vsix... ([VSIX Installation](https://github.com/yurimarx/iris-global-editor/blob/master/images/install.png)\)
-7. Select the file iris-global-editor-0.0.1.vsix
+7. Select the file iris-global-editor-0.0.2.vsix (install the 0.0.2 version, previous version was iris-global-editor-0.0.1.vsix)
 8. Go to menu View > Explorer
 9. Now a new section InterSystems IRIS Globals is available
 10. Config the host and credentials on .vscode/settings.json, including this content (change host, namespace, username, password with your valid values):
@@ -20,6 +20,9 @@ This is a VSCode Plug-in to do CRUD operations over InterSystems IRIS Globals.
       "username": "_SYSTEM",
       "password": "SYS"
     }
+
+## Tutorial 
+Go to https://community.intersystems.com/post/edit-your-globals-vscode-and-yaml 
 
 ## Features
 
@@ -55,8 +58,12 @@ No issues.
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.1
 
 Initial release 
+
+### 0.0.2
+
+Filter global list
 
 **Enjoy!**

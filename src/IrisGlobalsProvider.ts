@@ -224,6 +224,30 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
       
   }
 
+  async filterGlobals() {
+    
+    const configuration = await vscode.workspace.getConfiguration('');
+    var filter: string = configuration.get('conf.irisGlobalEditor.filter')!;
+    
+    var selectedText = filter;
+
+    const addInput = await vscode.window.showInputBox({
+      prompt: "Enter the filter to global name (partial name of global)",
+      value: selectedText
+    });
+    
+    if(addInput === undefined){
+      console.log(addInput);
+      vscode.window.showErrorMessage('A filter value is mandatory to execute this action');
+    } else {
+      await vscode.workspace.getConfiguration().update('conf.irisGlobalEditor.filter', addInput);
+      this.getGlobals();
+      this.refresh();
+      vscode.window.showInformationMessage('Filtered with success');
+    }
+
+  }
+
   async getGlobals(): Promise<IrisGlobal[]> {
 
     let response: IrisGlobal[] = [];
@@ -243,11 +267,18 @@ export class IrisGlobalsTreeProvider implements vscode.TreeDataProvider<IrisGlob
 
     const globalsYaml: AxiosResponse = await client.get("/globals/" + cfgValues.namespace, headers);
 
-    log(globalsYaml.data);
-    
     var arr = globalsYaml.data.split("\r\n");
+    if(arr.length > 0 && arr[0] === "# IRIS-Global-YAML") {
+      arr.splice(0, 1);
+    }
+    const configuration = await vscode.workspace.getConfiguration('');
+    var filter: string = configuration.get('conf.irisGlobalEditor.filter')!;
+    
+    if(filter !== undefined && filter !== null && filter !== "") {
+      arr = arr.filter((el: string) => el.toLowerCase().includes(filter!.toLowerCase()));
+    } 
 
-    for (var i = 1; i < arr.length-1; i++) {
+    for (var i = 0; i < arr.length; i++) {
       const value = (arr[i] as string).trim();
 
       if(value !== "") {

@@ -9,6 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.registerTreeDataProvider('irisGlobals', irisGlobalsProvider);
 	const disposableRefresh = vscode.commands.registerCommand('irisGlobals.refreshEntry', () => irisGlobalsProvider.refresh());
 	const disposableAdd = vscode.commands.registerCommand('irisGlobals.addEntry', () => irisGlobalsProvider.add());
+	const filterGlobals = vscode.commands.registerCommand('irisGlobals.filterGlobals', () => irisGlobalsProvider.filterGlobals());
 	const disposableDelete = vscode.commands.registerCommand('irisGlobals.deleteEntry', (node: IrisGlobal) => irisGlobalsProvider.delete(node.label));
 	const disposableEdit = vscode.commands.registerCommand('irisGlobals.editEntry', (node: IrisGlobal) => irisGlobalsProvider.edit(node.label));
 	const disposableTextEdit = vscode.commands.registerCommand('irisGlobals.editTextEntry', (node: IrisGlobal) => irisGlobalsProvider.editText(node.label));
@@ -27,6 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableDelete);
 	context.subscriptions.push(disposableEdit);
 	context.subscriptions.push(disposableTextEdit);
+	context.subscriptions.push(filterGlobals);
 }
 
 // This method is called when your extension is deactivated

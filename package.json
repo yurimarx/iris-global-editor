@@ -3,7 +3,7 @@
   "displayName": "iris-global-editor",
   "description": "IRIS Global Editor",
   "repository": "https://github.com/yurimarx/iris-global-editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -61,10 +61,23 @@
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
         }
+      },
+      {
+        "command": "irisGlobals.filterGlobals",
+        "title": "IRIS Globals: Filter",
+        "icon": {
+          "light": "resources/light/filter.svg",
+          "dark": "resources/dark/filter.svg"
+        }
       }
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "irisGlobals.filterGlobals",
+          "when": "view == irisGlobals",
+          "group": "navigation"
+        },
         {
           "command": "irisGlobals.refreshEntry",
           "when": "view == irisGlobals",
@@ -78,12 +91,12 @@
       ],
       "view/item/context": [
         {
-          "command": "irisGlobals.deleteEntry",
+          "command": "irisGlobals.editEntry",
           "when": "view == irisGlobals",
           "group": "inline"
         },
         {
-          "command": "irisGlobals.editEntry",
+          "command": "irisGlobals.deleteEntry",
           "when": "view == irisGlobals",
           "group": "inline"
         },
@@ -100,6 +113,11 @@
         "title": "Settings InterSystems IRIS Global Editor",
         "order": 1,
         "properties": {
+          "conf.irisGlobalEditor.filter": {
+            "type": "string",
+            "default": "",
+            "description": "Filter criteria to filter globals list"
+          },
           "conf.irisGlobalEditor.serverconfig": {
             "type": "object",
             "order": 1,
